@@ -79,8 +79,12 @@
  */
 #ifndef LWIP_PLATFORM_DIAG
 #define LWIP_PLATFORM_DIAG(x) do {printf x;} while(0)
+#ifdef MROS2_LWIP_NO_STDDEF
+#else
 #include <stdio.h>
 #include <stdlib.h>
+#endif
+
 #endif
 
 /** Platform specific assertion handling.\n
@@ -104,7 +108,10 @@
 #endif
 
 #if !LWIP_NO_STDDEF_H
+#ifdef MROS2_LWIP_NO_STDDEF
+#else
 #include <stddef.h> /* for size_t */
+#endif
 #endif
 
 /** Define this to 1 in arch/cc.h of your port if your compiler does not provide
@@ -117,11 +124,18 @@
 
 /* Define generic types used in lwIP */
 #if !LWIP_NO_STDINT_H
+#ifdef MROS2_LWIP_NO_STDDEF
+#else
 #include <stdint.h>
+#endif
 /* stdint.h is C99 which should also provide support for 64-bit integers */
 #if !defined(LWIP_HAVE_INT64) && defined(UINT64_MAX)
 #define LWIP_HAVE_INT64 1
 #endif
+#ifdef MROS2_LWIP_NO_STDDEF
+#include "atk2ext_common.h"
+#endif
+
 typedef uint8_t   u8_t;
 typedef int8_t    s8_t;
 typedef uint16_t  u16_t;
@@ -145,7 +159,10 @@ typedef uintptr_t mem_ptr_t;
 
 /* Define (sn)printf formatters for these lwIP types */
 #if !LWIP_NO_INTTYPES_H
+#ifdef MROS2_LWIP_NO_STDDEF
+#else
 #include <inttypes.h>
+#endif
 #ifndef X8_F
 #define X8_F  "02" PRIx8
 #endif

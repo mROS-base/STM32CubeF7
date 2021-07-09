@@ -34,7 +34,10 @@
 
 #include "cpu.h"
 #include <stdlib.h>
+#ifdef MROS2_LWIP_NO_STDDEF
+#else
 #include <stdio.h>
+#endif
 
 typedef int sys_prot_t;
 
@@ -43,7 +46,10 @@ typedef int sys_prot_t;
 #if defined (__GNUC__) & !defined (__CC_ARM)
 
 #define LWIP_TIMEVAL_PRIVATE 0
+#ifdef MROS2_LWIP_NO_STDDEF
+#else
 #include <sys/time.h>
+#endif
 
 #endif
 
@@ -79,8 +85,14 @@ typedef int sys_prot_t;
 
 #endif
 
+#ifdef MROS2_LWIP_NO_STDDEF
+#include "atk2ext_common.h"
+#define LWIP_PLATFORM_ASSERT(x) do {syslog(LOG_NOTICE, "Assertion \"%s\" failed at line %d in %s\n", \
+                                     x, __LINE__, __FILE__); } while(0)
+#else
 #define LWIP_PLATFORM_ASSERT(x) do {printf("Assertion \"%s\" failed at line %d in %s\n", \
                                      x, __LINE__, __FILE__); } while(0)
+#endif
 
 /* Define random number generator function */
 #define LWIP_RAND() ((u32_t)rand())
